@@ -1,6 +1,6 @@
 package ru.devsand.transmitter;
 
-public class Main {
+public class Launcher {
 
     public static void main(String[] args) {
 
