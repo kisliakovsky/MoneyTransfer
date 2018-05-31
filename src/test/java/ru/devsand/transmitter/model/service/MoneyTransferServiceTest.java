@@ -9,13 +9,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AccountServiceTest {
+public class MoneyTransferServiceTest {
 
     @Mock
-    AccountService accountService;
+    MoneyTransferService moneyTransferService;
 
     @Test
-    public void checkService() {
+    public void checkMoneyTransfer() {
 
     }
 
