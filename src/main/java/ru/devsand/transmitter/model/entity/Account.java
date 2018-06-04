@@ -19,8 +19,7 @@ public class Account implements Entity {
     @DatabaseField(columnName = "currency", canBeNull = false, width = 3, useGetSet = true)
     private String currency;
 
-    public Account() {
-    }
+    public Account() {}
 
     public Account(Customer customer, BigDecimal balance, int priority, String currency) {
         this.customer = customer;

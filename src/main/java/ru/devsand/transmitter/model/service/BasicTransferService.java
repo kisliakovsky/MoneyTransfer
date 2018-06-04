@@ -34,6 +34,11 @@ public class BasicTransferService implements TransferService {
     @Override
     public Transfer transferMoneyDirectly(long senderAccountId, long receiverAccountId,
                                           BigDecimal sum) throws SQLException {
+        if (senderAccountId == receiverAccountId) {
+            return pretendToTransferMoneyDirectly(senderAccountId, sum);
+        } else if (sum.equals(BigDecimal.ZERO)) {
+            return transferZeroDirectly(senderAccountId, receiverAccountId);
+        }
         return transferRepository.performTransaction(() -> {
             Account senderAccount = accountService.getAccountById(senderAccountId)
                     .orElseThrow(AccountNotFoundException::new);
@@ -43,26 +48,31 @@ public class BasicTransferService implements TransferService {
         });
     }
 
+    private Transfer pretendToTransferMoneyDirectly(long accountId, BigDecimal sum)
+            throws SQLException {
+        return transferRepository.performTransaction(() -> {
+            Account account = accountService.getAccountById(accountId)
+                    .orElseThrow(AccountNotFoundException::new);
+            return saveTransfer(account, account, sum);
+        });
+    }
+
+    private Transfer transferZeroDirectly(long senderAccountId, long receiverAccountId)
+            throws SQLException {
+        return transferRepository.performTransaction(() -> {
+            Account senderAccount = accountService.getAccountById(senderAccountId)
+                    .orElseThrow(AccountNotFoundException::new);
+            Account receiverAccount = accountService.getAccountById(receiverAccountId)
+                    .orElseThrow(AccountNotFoundException::new);
+            return saveTransfer(senderAccount, receiverAccount, BigDecimal.ZERO);
+        });
+    }
+
     private Transfer transferMoneyDirectlyHelper(Account senderAccount, Account receiverAccount,
                                                  BigDecimal sum) throws SQLException {
         updateSenderAccount(senderAccount, sum);
         updateReceiverAccount(receiverAccount, sum);
         return saveTransfer(senderAccount, receiverAccount, sum);
-    }
-
-    private Transfer saveTransfer(Account senderAccount, Account receiverAccount,
-                                  BigDecimal sum) throws SQLException {
-        Transfer transfer = new Transfer(senderAccount, receiverAccount, sum,
-                new Timestamp(System.currentTimeMillis()));
-        transferRepository.add(transfer);
-        return transfer;
-    }
-
-    private void updateReceiverAccount(Account receiverAccount, BigDecimal sum)
-            throws SQLException {
-        BigDecimal receiverBalance = receiverAccount.getBalance();
-        receiverAccount.setBalance(receiverBalance.add(sum));
-        accountService.updateAccount(receiverAccount);
     }
 
     private void updateSenderAccount(Account senderAccount, BigDecimal sum)
@@ -80,13 +90,50 @@ public class BasicTransferService implements TransferService {
         }
     }
 
+    private void updateReceiverAccount(Account receiverAccount, BigDecimal sum)
+            throws SQLException {
+        BigDecimal receiverBalance = receiverAccount.getBalance();
+        receiverAccount.setBalance(receiverBalance.add(sum));
+        accountService.updateAccount(receiverAccount);
+    }
+
+    private Transfer saveTransfer(Account senderAccount, Account receiverAccount,
+                                  BigDecimal sum) throws SQLException {
+        Transfer transfer = new Transfer(senderAccount, receiverAccount, sum,
+                new Timestamp(System.currentTimeMillis()));
+        transferRepository.add(transfer);
+        return transfer;
+    }
+
     @Override
     public Transfer transferMoneyByPhoneNumber(String senderPhoneNumber, String receiverPhoneNumber,
                                                BigDecimal sum) throws SQLException {
+        if (senderPhoneNumber.equals(receiverPhoneNumber)) {
+            return pretendToTransferMoneyByPhoneNumber(senderPhoneNumber, sum);
+        } else if (sum.equals(BigDecimal.ZERO)) {
+            return transferZeroByPhoneNumber(senderPhoneNumber, receiverPhoneNumber);
+        }
         return transferRepository.performTransaction(() -> {
             Account senderAccount = getAccountByPhoneNumber(senderPhoneNumber);
             Account receiverAccount = getAccountByPhoneNumber(receiverPhoneNumber);
             return transferMoneyDirectlyHelper(senderAccount, receiverAccount, sum);
+        });
+    }
+
+    private Transfer pretendToTransferMoneyByPhoneNumber(String phoneNumber, BigDecimal sum)
+            throws SQLException {
+        return transferRepository.performTransaction(() -> {
+            Account account = getAccountByPhoneNumber(phoneNumber);
+            return saveTransfer(account, account, sum);
+        });
+    }
+
+    private Transfer transferZeroByPhoneNumber(String senderPhoneNumber, String receiverPhoneNumber)
+            throws SQLException {
+        return transferRepository.performTransaction(() -> {
+            Account senderAccount = getAccountByPhoneNumber(senderPhoneNumber);
+            Account receiverAccount = getAccountByPhoneNumber(receiverPhoneNumber);
+            return saveTransfer(senderAccount, receiverAccount, BigDecimal.ZERO);
         });
     }
 

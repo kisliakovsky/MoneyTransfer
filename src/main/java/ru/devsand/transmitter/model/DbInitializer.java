@@ -5,7 +5,10 @@ import com.j256.ormlite.table.TableUtils;
 import ru.devsand.transmitter.model.entity.Account;
 import ru.devsand.transmitter.model.entity.Customer;
 import ru.devsand.transmitter.model.entity.Transfer;
-import ru.devsand.transmitter.model.repository.*;
+import ru.devsand.transmitter.model.repository.AccountRepository;
+import ru.devsand.transmitter.model.repository.BasicAccountRepository;
+import ru.devsand.transmitter.model.repository.BasicCustomerRepository;
+import ru.devsand.transmitter.model.repository.CustomerRepository;
 import ru.devsand.transmitter.model.service.AccountService;
 import ru.devsand.transmitter.model.service.BasicAccountService;
 import ru.devsand.transmitter.model.service.BasicCustomerService;
@@ -13,8 +16,6 @@ import ru.devsand.transmitter.model.service.CustomerService;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
