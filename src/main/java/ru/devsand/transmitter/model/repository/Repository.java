@@ -1,21 +1,31 @@
 package ru.devsand.transmitter.model.repository;
 
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 public interface Repository<E, I> {
 
-    <S extends E> S add(S subEntity);
+    void add(E subEntity) throws SQLException;
 
-    List<E> findAll();
+    void addAll(Collection<E> entities) throws SQLException;
 
-    E findOne(I id);
+    List<E> findAll() throws SQLException;
 
-    <S extends E> void update(S subEntity);
+    E findOne(I id) throws SQLException;
 
-    void delete(I id);
+    void update(E entity) throws SQLException;
 
-    boolean exists(I id);
+    void delete(I id) throws SQLException;
 
-    long count();
+    boolean exists(I id) throws SQLException;
+
+    long count() throws SQLException;
+
+    void forEach(Consumer<E> action);
+
+    <T> T performTransaction(Callable<T> action) throws SQLException;
 
 }

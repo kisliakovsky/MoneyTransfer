@@ -1,4 +1,7 @@
 package ru.devsand.transmitter.model.repository;
 
-public interface TransferRepository {
+import ru.devsand.transmitter.model.entity.Transfer;
+
+public interface TransferRepository extends Repository<Transfer, Long> {
+
 }
