@@ -4,11 +4,14 @@ import ru.devsand.transmitter.model.entity.Transfer;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public interface TransferService {
 
     Optional<Transfer> getTransfer(long id) throws SQLException;
+
+    List<Transfer> getTransfers() throws SQLException;
 
     Transfer transferMoneyDirectly(long senderAccountId, long receiverAccountId, BigDecimal sum) throws SQLException;
 

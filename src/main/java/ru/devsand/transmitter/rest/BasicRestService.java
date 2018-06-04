@@ -34,7 +34,8 @@ public class BasicRestService implements RestService {
         port(port);
         path("/api", () -> {
             before("/*", (request, response) -> LOGGER.info("Received api call"));
-            path("/transfer", () -> {
+            get("/transfers", transferController::getTransfers);
+            path("/transfers", () -> {
                 get("/:id", transferController::getTransfer);
                 post("/make", transferController::makePlainTransfer);
                 post("/makebyphone", transferController::makePhoneTransfer);

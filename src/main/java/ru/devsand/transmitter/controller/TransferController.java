@@ -17,6 +17,7 @@ import spark.Request;
 import spark.Response;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -39,13 +40,22 @@ public class TransferController {
                 customerRepository);
     }
 
+    public Object getTransfers(Request request, Response response) throws SQLException {
+        List<Transfer> transfers = transferService.getTransfers();
+        return gson.toJson(StandardResponse.withData(transfers));
+    }
+
     public Object getTransfer(Request request, Response response) throws SQLException {
-        int id = Integer.valueOf(request.params(":id"));
-        final Optional<Transfer> transferOp = transferService.getTransfer(id);
-        if (transferOp.isPresent()) {
-            return gson.toJson(StandardResponse.withData(transferOp.get()));
-        } else {
-            return gson.toJson(StandardResponse.errorResponse("Transfer not found"));
+        try {
+            int id = Integer.valueOf(request.params(":id"));
+            final Optional<Transfer> transferOp = transferService.getTransfer(id);
+            if (transferOp.isPresent()) {
+                return gson.toJson(StandardResponse.withData(transferOp.get()));
+            } else {
+                return gson.toJson(StandardResponse.errorResponse("Transfer not found"));
+            }
+        } catch (NumberFormatException e) {
+            return gson.toJson(StandardResponse.errorResponse("Invalid request"));
         }
     }
 

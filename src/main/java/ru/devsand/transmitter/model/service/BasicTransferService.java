@@ -10,6 +10,7 @@ import ru.devsand.transmitter.model.repository.TransferRepository;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 public class BasicTransferService implements TransferService {
@@ -29,6 +30,11 @@ public class BasicTransferService implements TransferService {
     @Override
     public Optional<Transfer> getTransfer(long id) throws SQLException {
         return Optional.ofNullable(transferRepository.findOne(id));
+    }
+
+    @Override
+    public List<Transfer> getTransfers() throws SQLException {
+        return transferRepository.findAll();
     }
 
     @Override
