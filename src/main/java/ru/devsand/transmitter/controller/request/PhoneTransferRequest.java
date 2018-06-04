@@ -35,6 +35,6 @@ public class PhoneTransferRequest implements TransferRequest {
     @Override
     public boolean isValid() {
         return senderPhoneNumber != null && receiverPhoneNumber != null &&
-                sum.compareTo(BigDecimal.ZERO) >= 0;
+                sum.compareTo(BigDecimal.ZERO) > 0;
     }
 }

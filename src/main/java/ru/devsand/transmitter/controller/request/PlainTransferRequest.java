@@ -14,7 +14,7 @@ public class PlainTransferRequest implements TransferRequest {
 
     public boolean isValid() {
         return senderAccountId != null && receiverAccountId != null &&
-                sum.compareTo(BigDecimal.ZERO) >= 0;
+                sum.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public void setSenderAccountId(long senderAccountId) {

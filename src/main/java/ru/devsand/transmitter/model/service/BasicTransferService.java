@@ -42,8 +42,6 @@ public class BasicTransferService implements TransferService {
                                           BigDecimal sum) throws SQLException {
         if (senderAccountId == receiverAccountId) {
             return pretendToTransferMoneyDirectly(senderAccountId, sum);
-        } else if (sum.equals(BigDecimal.ZERO)) {
-            return transferZeroDirectly(senderAccountId, receiverAccountId);
         }
         return transferRepository.performTransaction(() -> {
             Account senderAccount = accountService.getAccountById(senderAccountId)
