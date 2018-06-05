@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import ru.devsand.transmitter.controller.TransferController;
 import ru.devsand.transmitter.model.connection.BasicDbConnector;
 import ru.devsand.transmitter.model.connection.DbConnector;
-import ru.devsand.transmitter.model.service.AccountNotFoundException;
+import spark.Spark;
 
 import java.sql.SQLException;
 
@@ -45,6 +45,7 @@ public class BasicRestService implements RestService {
     }
 
     public void stop() {
+        Spark.stop();
         try {
             connector.close();
         } catch (Exception e) {
