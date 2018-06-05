@@ -73,7 +73,7 @@ localhost:4567/api/transfers/1
 ## Transfer money from one account to another by their ids
 **Description:**  
 You can make a money transfer specifying 
-a sender account id, a receiver account id and a sum of money. 
+a sender account id, a receiver account id and a sum of money (in currency of the sender's account). 
 Pay attention that you have to specify parameters of the request 
 in its body in JSON format.
 API responds with a JSON object with 
@@ -127,7 +127,7 @@ localhost:4567/api/transfers/make
 ## Transfer money from one account to another by linked phone numbers
 **Description:**  
 You can make a money transfer specifying 
-both sender's and receiver's phone numbers and a sum of money. 
+both sender's and receiver's phone numbers and a sum of money (in currency of the sender's account). 
 Pay attention that you have to specify parameters of the request 
 in its body in JSON format.
 API responds with a JSON object with 
