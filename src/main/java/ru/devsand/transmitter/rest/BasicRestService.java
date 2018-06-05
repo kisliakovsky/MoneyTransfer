@@ -9,6 +9,7 @@ import ru.devsand.transmitter.model.connection.DbConnector;
 import spark.Spark;
 
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 import static ru.devsand.transmitter.model.DbInitializer.fillInDatabase;
 import static spark.Spark.*;
@@ -45,11 +46,25 @@ public class BasicRestService implements RestService {
     }
 
     public void stop() {
-        Spark.stop();
         try {
             connector.close();
         } catch (Exception e) {
             LOGGER.error("Failed to close DB connection", e);
+        }
+        Spark.stop();
+        blockUntilStop();
+    }
+
+    private void blockUntilStop() {
+        while (true) {
+            try {
+                Spark.port();
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (IllegalStateException ignored) {
+                break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
