@@ -7,8 +7,16 @@ import java.util.List;
 public class TransfersResponse {
 
     private String status;
+    private String message;
     private List<Transfer> data;
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getStatus() {
         return status;

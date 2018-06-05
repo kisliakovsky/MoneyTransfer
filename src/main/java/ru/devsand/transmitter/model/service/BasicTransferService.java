@@ -1,11 +1,14 @@
 package ru.devsand.transmitter.model.service;
 
 import ru.devsand.transmitter.model.entity.Account;
+import ru.devsand.transmitter.model.entity.Currency;
 import ru.devsand.transmitter.model.entity.Customer;
 import ru.devsand.transmitter.model.entity.Transfer;
 import ru.devsand.transmitter.model.repository.AccountRepository;
 import ru.devsand.transmitter.model.repository.CustomerRepository;
 import ru.devsand.transmitter.model.repository.TransferRepository;
+import ru.devsand.transmitter.thirdparty.ExchangeRateService;
+import ru.devsand.transmitter.thirdparty.ExchangeRateServiceMock;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -18,6 +21,7 @@ public class BasicTransferService implements TransferService {
     private TransferRepository transferRepository;
     private AccountService accountService;
     private CustomerService customerService;
+    private ExchangeRateService rateService;
 
     public BasicTransferService(TransferRepository transferRepository,
                                 AccountRepository accountRepository,
@@ -25,6 +29,7 @@ public class BasicTransferService implements TransferService {
         this.transferRepository = transferRepository;
         this.accountService = new BasicAccountService(accountRepository);
         this.customerService = new BasicCustomerService(customerRepository);
+        this.rateService = new ExchangeRateServiceMock();
     }
 
     @Override
@@ -75,7 +80,11 @@ public class BasicTransferService implements TransferService {
     private Transfer transferMoneyDirectlyHelper(Account senderAccount, Account receiverAccount,
                                                  BigDecimal sum) throws SQLException {
         updateSenderAccount(senderAccount, sum);
-        updateReceiverAccount(receiverAccount, sum);
+        Currency senderCurrency = Currency.valueOf(senderAccount.getCurrency());
+        Currency receiverCurrency =  Currency.valueOf(receiverAccount.getCurrency());
+        BigDecimal rate = rateService.obtainRate(senderCurrency, receiverCurrency);
+        BigDecimal convertedSum = sum.multiply(rate);
+        updateReceiverAccount(receiverAccount, convertedSum);
         return saveTransfer(senderAccount, receiverAccount, sum);
     }
 

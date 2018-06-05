@@ -37,7 +37,7 @@ public class DbInitializer {
             new Account(DEFAULT_CUSTOMERS.get(1), BigDecimal.valueOf(2000), 1, "RUB"),
             new Account(DEFAULT_CUSTOMERS.get(2), BigDecimal.valueOf(3000), 1, "RUB"),
             new Account(DEFAULT_CUSTOMERS.get(3), BigDecimal.valueOf(3000), 1, "RUB"),
-            new Account(DEFAULT_CUSTOMERS.get(4), BigDecimal.valueOf(3000), 1, "RUB")
+            new Account(DEFAULT_CUSTOMERS.get(4), BigDecimal.valueOf(3000), 1, "USD")
     );
 
     public static void fillInDatabase(ConnectionSource connectionSource)

@@ -1,6 +1,6 @@
 package ru.devsand.transmitter.model.entity;
 
-public enum  Currency {
+public enum Currency {
 
     GBP, RUB, USD, EUR;
 

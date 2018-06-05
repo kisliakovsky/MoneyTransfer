@@ -5,7 +5,16 @@ import ru.devsand.transmitter.model.entity.Transfer;
 public class TransferResponse {
 
     private String status;
+    private String message;
     private Transfer data;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getStatus() {
         return status;
