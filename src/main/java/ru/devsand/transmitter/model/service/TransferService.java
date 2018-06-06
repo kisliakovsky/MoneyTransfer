@@ -3,19 +3,18 @@ package ru.devsand.transmitter.model.service;
 import ru.devsand.transmitter.model.entity.Transfer;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public interface TransferService {
 
-    Optional<Transfer> getTransfer(long id) throws SQLException;
+    Optional<Transfer> getTransfer(long id) throws UnavailableDataException;
 
-    List<Transfer> getTransfers() throws SQLException;
+    List<Transfer> getTransfers() throws UnavailableDataException;
 
-    Transfer transferMoneyDirectly(long senderAccountId, long receiverAccountId, BigDecimal sum) throws SQLException;
+    Transfer transferMoneyDirectly(long senderAccountId, long receiverAccountId, BigDecimal sum) throws UnableSaveException, InsufficientFundsException, UnavailableDataException;
 
     Transfer transferMoneyByPhoneNumber(String senderPhoneNumber, String receiverPhoneNumber,
-                                        BigDecimal sum) throws SQLException;
+                                        BigDecimal sum) throws UnableSaveException, InsufficientFundsException, UnavailableDataException;
 
 }

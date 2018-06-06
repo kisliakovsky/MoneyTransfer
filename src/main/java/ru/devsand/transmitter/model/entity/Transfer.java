@@ -6,7 +6,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 
 @DatabaseTable(tableName = "transfers")

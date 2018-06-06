@@ -2,14 +2,13 @@ package ru.devsand.transmitter.model.service;
 
 import ru.devsand.transmitter.model.entity.Customer;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Optional;
 
 public interface CustomerService {
 
-    void addCustomers(Collection<Customer> customers) throws SQLException;
+    void addCustomers(Collection<Customer> customers) throws UnableSaveException;
 
-    Optional<Customer> getCustomerByPhoneNumber(String phoneNumber) throws SQLException;
+    Optional<Customer> getCustomerByPhoneNumber(String phoneNumber) throws UnableSaveException;
 
 }

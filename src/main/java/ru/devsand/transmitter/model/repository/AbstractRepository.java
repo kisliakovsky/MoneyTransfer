@@ -5,7 +5,6 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
-import ru.devsand.transmitter.model.entity.Transfer;
 
 import java.io.IOException;
 import java.sql.SQLException;

@@ -9,10 +9,7 @@ import ru.devsand.transmitter.model.repository.AccountRepository;
 import ru.devsand.transmitter.model.repository.BasicAccountRepository;
 import ru.devsand.transmitter.model.repository.BasicCustomerRepository;
 import ru.devsand.transmitter.model.repository.CustomerRepository;
-import ru.devsand.transmitter.model.service.AccountService;
-import ru.devsand.transmitter.model.service.BasicAccountService;
-import ru.devsand.transmitter.model.service.BasicCustomerService;
-import ru.devsand.transmitter.model.service.CustomerService;
+import ru.devsand.transmitter.model.service.*;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -41,7 +38,7 @@ public class DbInitializer {
     );
 
     public static void fillInDatabase(ConnectionSource connectionSource)
-            throws SQLException {
+            throws SQLException, UnableSaveException {
         createTables(connectionSource);
         CustomerRepository customerRepository = new BasicCustomerRepository(connectionSource);
         CustomerService customerService = new BasicCustomerService(customerRepository);

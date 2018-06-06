@@ -40,12 +40,16 @@ public class TransferController {
                 customerRepository);
     }
 
-    public Object getTransfers(Request request, Response response) throws SQLException {
-        List<Transfer> transfers = transferService.getTransfers();
-        return gson.toJson(StandardResponse.withData(transfers));
+    public Object getTransfers(Request request, Response response) {
+        try {
+            List<Transfer> transfers = transferService.getTransfers();
+            return gson.toJson(StandardResponse.withData(transfers));
+        } catch (UnavailableDataException e) {
+            return gson.toJson(StandardResponse.errorResponse("Internal server error"));
+        }
     }
 
-    public Object getTransfer(Request request, Response response) throws SQLException {
+    public Object getTransfer(Request request, Response response) {
         try {
             int id = Integer.valueOf(request.params(":id"));
             final Optional<Transfer> transferOp = transferService.getTransfer(id);
@@ -56,6 +60,8 @@ public class TransferController {
             }
         } catch (NumberFormatException e) {
             return gson.toJson(StandardResponse.errorResponse("Invalid request"));
+        } catch (UnavailableDataException e) {
+            return gson.toJson(StandardResponse.errorResponse("Internal server error"));
         }
     }
 
@@ -71,8 +77,8 @@ public class TransferController {
                 return gson.toJson(StandardResponse.errorResponse("Account not found"));
             } catch (InsufficientFundsException e) {
                 return gson.toJson(StandardResponse.errorResponse("Insufficient funds"));
-            } catch (SQLException e) {
-                return gson.toJson(StandardResponse.errorResponse("Database error"));
+            } catch (UnavailableDataException|UnableSaveException e) {
+                return gson.toJson(StandardResponse.errorResponse("Internal server error"));
             }
         } else {
             return gson.toJson(StandardResponse.errorResponse("Invalid request"));
@@ -93,8 +99,8 @@ public class TransferController {
                 return gson.toJson(StandardResponse.errorResponse("Account not found"));
             } catch (InsufficientFundsException e) {
                 return gson.toJson(StandardResponse.errorResponse("Insufficient funds"));
-            } catch (SQLException e) {
-                return gson.toJson(StandardResponse.errorResponse("Database error"));
+            } catch (UnavailableDataException|UnableSaveException e) {
+                return gson.toJson(StandardResponse.errorResponse("Internal server error"));
             }
         } else {
             return gson.toJson(StandardResponse.errorResponse("Invalid request"));

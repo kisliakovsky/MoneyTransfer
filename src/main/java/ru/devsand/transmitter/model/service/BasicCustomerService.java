@@ -16,13 +16,22 @@ public class BasicCustomerService implements CustomerService {
     }
 
     @Override
-    public void addCustomers(Collection<Customer> customers) throws SQLException {
-        customerRepository.addAll(customers);
+    public void addCustomers(Collection<Customer> customers) throws UnableSaveException {
+        try {
+            customerRepository.addAll(customers);
+        } catch (SQLException e) {
+            throw new UnableSaveException();
+        }
     }
 
     @Override
-    public Optional<Customer> getCustomerByPhoneNumber(String phoneNumber) throws SQLException {
-        return Optional.ofNullable(customerRepository.findByPhoneNumber(phoneNumber));
+    public Optional<Customer> getCustomerByPhoneNumber(String phoneNumber)
+            throws UnableSaveException {
+        try {
+            return Optional.ofNullable(customerRepository.findByPhoneNumber(phoneNumber));
+        } catch (SQLException e) {
+            throw new UnableSaveException();
+        }
     }
 
 }

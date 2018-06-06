@@ -8,7 +8,6 @@ import ru.devsand.transmitter.model.connection.BasicDbConnector;
 import ru.devsand.transmitter.model.connection.DbConnector;
 import spark.Spark;
 
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 import static ru.devsand.transmitter.model.DbInitializer.fillInDatabase;
@@ -22,12 +21,16 @@ public class BasicRestService implements RestService {
     private final DbConnector<ConnectionSource> connector;
     private final TransferController transferController;
 
-    public BasicRestService(int port) throws SQLException {
+    public BasicRestService(int port)  {
         this.port = port;
-        this.connector = new BasicDbConnector();
-        ConnectionSource connectionSource = connector.getConnectionSource();
-        fillInDatabase(connectionSource);
-        this.transferController = new TransferController(connectionSource);
+        try {
+            this.connector = new BasicDbConnector();
+            ConnectionSource connectionSource = connector.getConnectionSource();
+            fillInDatabase(connectionSource);
+            this.transferController = new TransferController(connectionSource);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

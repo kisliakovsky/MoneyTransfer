@@ -18,29 +18,52 @@ public class BasicAccountService implements AccountService {
     }
 
     @Override
-    public Optional<Account> getAccountById(long id) throws SQLException {
-        return Optional.ofNullable(accountRepository.findOne(id));
+    public Optional<Account> getAccountById(long id) throws UnavailableDataException {
+        try {
+            return Optional.ofNullable(accountRepository.findOne(id));
+        } catch (SQLException e) {
+            throw new UnavailableDataException();
+        }
     }
 
     @Override
-    public void addAccounts(Collection<Account> accounts) throws SQLException {
-        accountRepository.addAll(accounts);
+    public void addAccounts(Collection<Account> accounts) throws UnableSaveException {
+        try {
+            accountRepository.addAll(accounts);
+        } catch (SQLException e) {
+            throw new UnableSaveException();
+        }
     }
 
     @Override
-    public void updateAccount(Account account) throws SQLException {
-        accountRepository.update(account);
+    public void updateAccount(Account account) throws UnableSaveException {
+        try {
+            accountRepository.update(account);
+        } catch (SQLException e) {
+            throw new UnableSaveException();
+        }
     }
 
     @Override
-    public List<Account> getAccountsByCustomerId(long customerId) throws SQLException {
-        return accountRepository.findByCustomerId(customerId);
+    public List<Account> getAccountsByCustomerId(long customerId) throws UnavailableDataException {
+        try {
+            return accountRepository.findByCustomerId(customerId);
+        } catch (SQLException e) {
+            throw new UnavailableDataException();
+        }
     }
 
     @Override
-    public Optional<Account> getMostPriorityAccountByCustomerId(long customerId) throws SQLException {
-        List<Account> customerAccounts = accountRepository.findByCustomerId(customerId);
-        return customerAccounts.stream().min(Comparator.comparingInt(Account::getPriority));
+    public Optional<Account> getMostPriorityAccountByCustomerId(long customerId)
+            throws UnavailableDataException {
+        List<Account> customerAccounts = null;
+        try {
+            customerAccounts = accountRepository.findByCustomerId(customerId);
+            return customerAccounts.stream().min(Comparator.comparingInt(Account::getPriority));
+        } catch (SQLException e) {
+            throw new UnavailableDataException();
+        }
+
     }
 
 }

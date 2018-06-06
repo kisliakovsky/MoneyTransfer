@@ -2,6 +2,7 @@ package ru.devsand.transmitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.devsand.transmitter.model.service.UnableSaveException;
 import ru.devsand.transmitter.rest.BasicRestService;
 import ru.devsand.transmitter.rest.RestService;
 
@@ -15,8 +16,8 @@ public class Launcher {
         try {
             RestService restService = new BasicRestService(4567);
             restService.start();
-        } catch (SQLException e) {
-            LOGGER.error("database error", e);
+        } catch (Exception e) {
+            LOGGER.error("Unable to start REST service", e);
         }
     }
 
