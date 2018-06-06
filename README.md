@@ -1,11 +1,16 @@
 # MoneyTransmitter
 MoneyTransmitter is an app that provides a simple RESTful API to transfer money between accounts.  
+
+
+##Usage
+```bash
+~$ java -jar transmitter.jar
+```
 By default the app runs on port number 4567. 
 ```bash
 localhost:4567 
 ```
-
-## Get completed money transfers
+### Get completed money transfers
 **Description:**  
 You can call completed transfers. 
 API responds with a JSON object with a list of
@@ -36,7 +41,7 @@ GET localhost:4567/api/transfers
 }
 ```
 **id** identifier of a transfer (a number of *long* type)
-## Get a completed money transfer by its id
+### Get a completed money transfer by its id
 **Description:**  
 You can call a completed transfer by its id. 
 API responds with a JSON object with 
@@ -70,7 +75,7 @@ localhost:4567/api/transfers/1
   }
 }
 ```
-## Transfer money from one account to another by their ids
+### Transfer money from one account to another by their ids
 **Description:**  
 You can make a money transfer specifying 
 a sender account id, a receiver account id and a sum of money (in currency of the sender's account). 
@@ -124,7 +129,7 @@ localhost:4567/api/transfers/make
   }
 }
 ```
-## Transfer money from one account to another by linked phone numbers
+### Transfer money from one account to another by linked phone numbers
 **Description:**  
 You can make a money transfer specifying 
 both sender's and receiver's phone numbers and a sum of money (in currency of the sender's account). 
@@ -178,7 +183,7 @@ localhost:4567/api/transfers/makebyphone
   }
 }
 ```
-## Errors
+### Errors
 When your call fails by some reason you get a JSON object with 
 the description of the error.  
 **Example of bad request** (wrong phone number of the sender)
