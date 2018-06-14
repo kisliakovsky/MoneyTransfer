@@ -51,7 +51,7 @@ public class BasicRestServiceTest {
                 }
             }
         });
-        URL hostAddress = new URL("http", "localhost", PORT, "");
+        URL hostAddress = new URL("http", "127.0.0.1", PORT, "");
         apiAddress = new URL(hostAddress, "api/transfers");
         pathJoiner = new StringJoiner(PATH_SEPARATOR);
         restService = new BasicRestService(PORT);
