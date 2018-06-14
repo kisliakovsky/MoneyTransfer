@@ -37,7 +37,7 @@ public class DbInitializer {
             new Account(DEFAULT_CUSTOMERS.get(4), BigDecimal.valueOf(3000), 1, "USD")
     );
 
-    public static void fillInDatabase(ConnectionSource connectionSource)
+    public static void prepareDatabase(ConnectionSource connectionSource)
             throws SQLException, UnableSaveException {
         createTables(connectionSource);
         CustomerRepository customerRepository = new BasicCustomerRepository(connectionSource);

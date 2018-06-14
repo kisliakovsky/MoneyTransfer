@@ -10,7 +10,7 @@ import spark.Spark;
 
 import java.util.concurrent.TimeUnit;
 
-import static ru.devsand.transmitter.model.DbInitializer.fillInDatabase;
+import static ru.devsand.transmitter.model.DbInitializer.prepareDatabase;
 import static spark.Spark.*;
 
 public class BasicRestService implements RestService {
@@ -26,7 +26,7 @@ public class BasicRestService implements RestService {
         try {
             this.connector = new BasicDbConnector();
             ConnectionSource connectionSource = connector.getConnectionSource();
-            fillInDatabase(connectionSource);
+            prepareDatabase(connectionSource);
             this.transferController = new TransferController(connectionSource);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -61,7 +61,7 @@ public class BasicRestService implements RestService {
     private void blockUntilStop() {
         while (true) {
             try {
-                Spark.port();
+                Spark.port(); // throws IllegalStateException when server has stoped
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (IllegalStateException ignored) {
                 break;
