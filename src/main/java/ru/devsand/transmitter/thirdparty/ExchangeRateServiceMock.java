@@ -3,12 +3,12 @@ package ru.devsand.transmitter.thirdparty;
 import ru.devsand.transmitter.model.entity.Currency;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class ExchangeRateServiceMock implements ExchangeRateService {
 
-    private static Map<Currency, BigDecimal> RATES = new HashMap<>();
+    private static final Map<Currency, BigDecimal> RATES = new EnumMap<>(Currency.class);
 
     static {
         RATES.put(Currency.GBP, BigDecimal.ONE);
