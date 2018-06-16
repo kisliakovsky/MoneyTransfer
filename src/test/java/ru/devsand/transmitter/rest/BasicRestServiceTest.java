@@ -2,23 +2,27 @@ package ru.devsand.transmitter.rest;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
-import org.hamcrest.number.BigDecimalCloseTo;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.junit.*;
+import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.awaitility.Duration;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import ru.devsand.transmitter.model.entity.Transfer;
 
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.StringJoiner;
+import java.util.concurrent.Future;
 
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.BigDecimalCloseTo.closeTo;
+import static org.junit.Assert.fail;
 
 
 public class BasicRestServiceTest {
@@ -65,12 +69,27 @@ public class BasicRestServiceTest {
     }
 
     @Test
-    public void checkGetTransfersByDefault() throws Exception {
-        HttpResponse<TransfersResponse> response = Unirest.get(apiAddress.toString())
-                .asObject(TransfersResponse.class);
-        TransfersResponse transfersResponse = response.getBody();
-        assertThat(transfersResponse.getStatus(), equalTo("SUCCESS"));
-        assertThat(transfersResponse.getData().size(), is(0));
+    public void checkGetTransfersByDefault() {
+        Future<HttpResponse<TransfersResponse>> responseFuture = Unirest.get(apiAddress.toString())
+                .asObjectAsync(TransfersResponse.class, new Callback<TransfersResponse>() {
+                    @Override
+                    public void completed(HttpResponse<TransfersResponse> response) {
+                        TransfersResponse transfersResponse = response.getBody();
+                        assertThat(transfersResponse.getStatus(), equalTo("SUCCESS"));
+                        assertThat(transfersResponse.getData().size(), is(0));
+                    }
+                    @Override
+                    public void failed(UnirestException e) {
+                        fail();
+                    }
+                    @Override
+                    public void cancelled() {
+                        fail();
+                    }
+                });
+        await().atMost(Duration.TEN_SECONDS)
+                .pollInterval(Duration.ONE_HUNDRED_MILLISECONDS)
+                .until(responseFuture::isDone);
     }
 
     @Test
