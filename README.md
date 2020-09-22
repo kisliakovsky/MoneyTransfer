@@ -1,4 +1,4 @@
-# MoneyTransmitter
+# MoneyTransfer
 MoneyTransmitter is an app that provides a simple RESTful API to transfer money between accounts.  
 
 
